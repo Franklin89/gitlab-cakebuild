@@ -10,7 +10,8 @@ RUN apt-get update \
     libicu-dev \
     libssl-dev \
     git \
-    nodejs
+    nodejs \
+    npm
 
 # Install mono
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
@@ -40,5 +41,6 @@ RUN mkdir dotnettest \
     && rm -r dotnettest
 
 # Display info installed components
+RUN npm --version
 RUN mono --version
 RUN dotnet --info
