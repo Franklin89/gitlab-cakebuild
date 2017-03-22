@@ -12,6 +12,8 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     libicu-dev \
     libssl-dev \
     git \
+    ca-certificates \
+    openssl \
     # .NET Core SDK
     dotnet-dev-1.0.1 \
  && rm -rf /var/lib/apt/lists/*
