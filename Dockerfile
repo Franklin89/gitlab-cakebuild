@@ -12,8 +12,6 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     libicu-dev \
     libssl-dev \
     git \
-    ca-certificates \
-    openssl \
     # .NET Core SDK
     dotnet-dev-1.0.1 \
  && rm -rf /var/lib/apt/lists/*
@@ -32,25 +30,6 @@ RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
     && npm install -g bower grunt gulp n \
     && rm -rf ~/n
 
-# Install docker
-ENV DOCKER_BUCKET get.docker.com
-ENV DOCKER_VERSION 17.03.0-ce
-ENV DOCKER_SHA256 4a9766d99c6818b2d54dc302db3c9f7b352ad0a80a2dc179ec164a3ba29c2d3e
-
-RUN set -x \
-	&& curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-	&& echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-	&& tar -xzvf docker.tgz \
-	&& mv docker/* /usr/local/bin/ \
-	&& rmdir docker \
-	&& rm docker.tgz
-
-ENV DOCKER_COMPOSE_VERSION 1.8.0
-
-RUN set -x \
- && curl -fSL "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m`" -o /usr/local/bin/docker-compose \
- && chmod +x /usr/local/bin/docker-compose
-
 # Prime dotnet
 RUN mkdir dotnettest \
     && cd dotnettest \
@@ -61,14 +40,7 @@ RUN mkdir dotnettest \
     && rm -r dotnettest
 
 # Display info installed components
-RUN docker -v
-RUN docker-compose -v
 RUN gulp --version
 RUN npm --version
 RUN mono --version
 RUN dotnet --info
-
-COPY docker-entrypoint.sh /usr/local/bin/
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["sh"]
